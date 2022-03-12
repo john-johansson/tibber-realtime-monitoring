@@ -1,0 +1,12 @@
+version: '2'
+services:
+  tibber-realtime-monitoring:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: garnser/tibber-realtime-monitoring
+    container_name: tibber-realtime-monitoring
+    volumes:
+      - ./realtime/config.ini:/realtime/config.ini:ro
+    
+    
