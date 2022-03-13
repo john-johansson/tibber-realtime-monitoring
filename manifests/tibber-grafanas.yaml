@@ -1,0 +1,44 @@
+apiVersion: integreatly.org/v1alpha1
+kind: Grafana
+metadata:
+  name: tibber-grafana
+spec:
+  deployment:
+    envFrom:
+      - secretRef:
+          name: tibber-secret
+  client:
+    preferService: true
+  config:
+    auth:
+      disable_login_form: false
+      disable_signout_menu: true
+    auth.anonymous:
+      enabled: true
+    log:
+      level: error
+      mode: console
+    log.frontend:
+      enabled: true
+  dashboardLabelSelector:
+    - matchExpressions:
+        - key: app
+          operator: In
+          values:
+            - grafana
+  ingress:
+    enabled: true
+    path: /
+    pathType: Prefix
+  resources:
+    limits:
+      cpu: 200m
+      memory: 200Mi
+    requests:
+      cpu: 100m
+      memory: 100Mi
+  service:
+    labels:
+      app: grafana
+      type: grafana-service
+    name: grafana-service

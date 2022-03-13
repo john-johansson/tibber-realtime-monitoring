@@ -1,0 +1,9 @@
+apiVersion: v1
+data:
+  INFLUXDB_BUCKET: tibber
+  INFLUXDB_ORG: tibber
+  INFLUXDB_SERVICE_HOST_PORT: http://influxdb:8086
+  WEATHERMAP_LOCATION: lat=56.9667&lon=16.4333
+kind: ConfigMap
+metadata:
+  name: tibber-config

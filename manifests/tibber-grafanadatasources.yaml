@@ -1,0 +1,19 @@
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDataSource
+metadata:
+  name: tibber-datasource
+spec:
+  name: tibber
+  datasources:
+    - name: InfluxDB
+      type: influxdb
+      isDefault: true
+      access: direct
+      url: http://influxdb:8086
+      secureJsonData:
+        token: $INFLUXDB_TOKEN
+      jsonData:
+        version: Flux
+        organization: tibber
+        defaultBucket: tibber
+        tlsSkipVerify: true
