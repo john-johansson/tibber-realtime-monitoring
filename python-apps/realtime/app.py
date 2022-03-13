@@ -5,22 +5,23 @@ import asyncio
 import aiohttp
 import tibber
 import configparser
+import os
 from influxdb_client.client.write_api import SYNCHRONOUS
 
 conf = configparser.ConfigParser()
 conf.read('config.ini')
 
 client = influxdb_client.InfluxDBClient(
-   url=conf["influx"]["url"],
-   token=conf["influx"]["token"],
-   org=conf["influx"]["org"]
+   url = os.environ['INFLUXDB_SERVICE_HOST_PORT'],
+   token = os.environ.get('INFLUXDB_TOKEN'),
+   org = os.environ.get('INFLUXDB_ORG')
 )
 
 write_api = client.write_api(write_options=SYNCHRONOUS)
 
 def _writeInflux(field, value):
     p = influxdb_client.Point("tibber").field(field, value)
-    write_api.write(bucket=conf["influx"]["bucket"], org=conf["influx"]["org"], record=p)
+    write_api.write(bucket=os.environ.get('INFLUXDB_BUCKET'), org=os.environ.get('INFLUXDB_ORG'), record=p)
 
 def _callback(pkg):
     data = pkg.get("data")
@@ -47,7 +48,7 @@ def _callback(pkg):
 
 async def run():
     async with aiohttp.ClientSession() as session:
-        tibber_connection = tibber.Tibber(conf["tibber"]["token"], websession=session)
+        tibber_connection = tibber.Tibber(os.environ['TIBBER_TOKEN'], websession=session)
         await tibber_connection.update_info()
     home = tibber_connection.get_homes()[0]
     await home.rt_subscribe(_callback)
