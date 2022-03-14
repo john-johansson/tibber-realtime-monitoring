@@ -31,3 +31,4 @@ p = influxdb_client.Point("weather").field("wind_speed", payload["wind"]["speed"
 write_api.write(bucket=os.environ.get('INFLUXDB_BUCKET'), org=os.environ.get('INFLUXDB_ORG'), record=p)
 p = influxdb_client.Point("weather").field("wind_deg", payload["wind"]["deg"])
 write_api.write(bucket=os.environ.get('INFLUXDB_BUCKET'), org=os.environ.get('INFLUXDB_ORG'), record=p)
+
