@@ -1,28 +1,17 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  labels:
-    job-name: currentprice
   name: currentprice
 spec:
-  schedule: 0 * * * * 
-  concurrencyPolicy: Allow
-  suspend: false       
+  schedule: "*/5 * * * *"
   jobTemplate:         
-    metadata:          
-      creationTimestamp: null
     spec:              
       template:
-        metadata:
-          labels:
-            job-name: currentprice
         spec:
           containers:
-          - image:  image-registry.openshift-image-registry.svc:5000/tibber-realtime/currentprice:latest
+          - image:  changeme
             imagePullPolicy: Always
             name: currentprice
-            terminationMessagePath: /dev/termination-log
-            terminationMessagePolicy: File
             env:
               - name: INFLUXDB_SERVICE_HOST_PORT
                 value: "http://$(INFLUXDB_SERVICE_HOST):$(INFLUXDB_SERVICE_PORT)"
@@ -31,7 +20,4 @@ spec:
                   name: tibber-secret
               - configMapRef:
                   name: tibber-config
-          dnsPolicy: ClusterFirst
           restartPolicy: OnFailure
-          schedulerName: default-scheduler
-          terminationGracePeriodSeconds: 30

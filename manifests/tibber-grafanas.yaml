@@ -42,3 +42,7 @@ spec:
       app: grafana
       type: grafana-service
     name: grafana-service
+  dataStorage:
+    accessModes:
+      - ReadWriteOnce
+    size: 10Gi

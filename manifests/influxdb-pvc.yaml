@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: influxdb-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: cinder-csi
+---
+apiVersion: v1    
+kind: PersistentVolumeClaim
+metadata:         
+  name: influxdb-conf
+spec:
+  accessModes:    
+    - ReadWriteOnce
+  resources:      
+    requests:     
+      storage: 1Gi
+  storageClassName: cinder-csi
