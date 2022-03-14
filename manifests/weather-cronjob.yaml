@@ -9,7 +9,7 @@ spec:
       template:
         spec:
           containers:
-          - image: image-registry.openshift-image-registry.svc:5000/tech-aw/weather
+          - image: changeme
             imagePullPolicy: Always
             name: weather
             env:
