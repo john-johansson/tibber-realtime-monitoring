@@ -1,0 +1,1 @@
+{"spec":{"template":{"spec":{"volumes":[{"name":"influxdb-volume-1","emptyDir":null,"persistentVolumeClaim": {"claimName":"influxdb-conf"}},{"name":"influxdb-volume-2","emptyDir":null,"persistentVolumeClaim":{"claimName":"influxdb-data"}}]}}}}
