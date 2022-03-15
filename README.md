@@ -1,36 +1,40 @@
-# Tibber Realtime Monitoring (in OKD)
+# Tibber Realtime Monitoring (running on OKD)
 
-This project give you the tools to create a simple application in OKD that visualize your power consumption and costs if you have tibber and an electricy meter with tibber pulse.
+This project give you the knowledge on how to create a simple application that visualize your power consumption (and costs if you have tibber). All work here is open source a free to use and distribute. Your only requirement is an modern electricy meter with tibber pulse plugged in to it.
 
-This project intention is to showcase different OKD features. It not to be seen as a best practice for developing or deploying cloud native applications. 
+**Discalimer:** This project intention is to showcase OKD features. It's not to be seen as a best practice for developing or deploying cloud native applications. 
 
-## Architecture 
-Look in the main branch for reference.
+## Architecture (orginal single node/docker deployment)
+The original application (which can be found in the main branch) is a python script that communicates with the tibber api and writes its data to an influxdb time series database. In addition to the main application, thee are two python scripts that runs as cron jobs. These cronjobs fetch cost and weather data from the tibber and weathermap API. InfluxDB is configured as a datasource to grafan and the collected data is visual in a grafa dashbaord.
 
-The main application is a python script that communicates with the tibber api and writes its data influxdb time series database. Additional python scripts run as cron jobs. These cronjobs fetch cost and weather data from the tibber and weathermap API.This data is also written to influxdb. Grafana is used for visualizing.
+All components run on a single machine. Docker is used for influxdb and grafana. The python scripts are dependent on hardcoded unique values, such as access tokens and location data.
 
-All components run on a single machine. Docker is used for infouxdb and grafana. The python scripts are dependent on hardcoded uniqe values, such as access tokens and location data.
-
-## Refactoring with OKD
+## Task: Refactor to run in kubernetes with help of OKD
 
 All resources are configured in a specific project (namespace)
 
-Create the project in OKD:
+Create the project (namespace) in OKD:
 
-`oc new-project openinfra`
+``` 
+oc new-project openinfra
+```
 
-Openstack specific: Create a storage class that use cinder for persistent storage
+If you run openstack with cinder, create a storage class that use cinder for persistent storage:
 
-`oc create -f manifests/sc.yaml`
+```
+oc create -f manifests/sc.yaml
+```
 
 ### influxdb
-Influxdb is deployed from the official container image in docker hub with the oc new-app command, which create a deployment. Variables to initiate the automated setup are provided in accordance with the official [documentation](https://hub.docker.com/_/influxdb).
+Influxdb is deployed from the official container image available at dockerhub.io. Variables to initiate the automated setup are provided in accordance with the official [documentation](https://hub.docker.com/_/influxdb).
+
+When you use the oc new-app command to create an application, it will also create all nessecary kubernetes resource to make in an application! 
 
 ```
 oc new-app influxdb:latest -e DOCKER_INFLUXDB_INIT_MODE=setup -e DOCKER_INFLUXDB_INIT_USERNAME=tibber  -e DOCKER_INFLUXDB_INIT_PASSWORD=tibber123 -e DOCKER_INFLUXDB_INIT_ORG=tibber -e DOCKER_INFLUXDB_INIT_BUCKET=tibber -n openinfra
 ```
 
-Optional: Create pvc:s for persisting the influxdb's data
+Optional, if you create the storage class earlier, create pvc:s for persisting the influxdb's data
 ```
 oc create -f manifests/influxdb-pvc.yaml -n openinfra
 oc patch deploy influxdb -n openinfra --patch-file manifests/influxdb-patch.js
