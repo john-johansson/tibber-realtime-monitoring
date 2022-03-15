@@ -4,12 +4,14 @@ This project give you the tools to create a simple application in OKD that visua
 
 This project intention is to showcase different OKD features. It not to be seen as a best practice for developing or deploying cloud native applications. 
 
-## Original Architecture 
-In the main branch, there is a python script that communicates with the tibber api and writes to a influxdb. There is also additional python scipts that run as cron jobs. Theese scripts talk to the tibber API to get the current price and talk to weathermap API to get the outside temperature from where electrity meter location. These values are also written into influxdb. Grafana is used for visualizing all the data collected.
+## Architecture 
+Look in the main branch for reference.
 
-All components run on a single machine. Docker is used for infouxdb and grafana. The python scripts are dependent on uniqe values, such as access tokens and location data.
+The main application is a python script that communicates with the tibber api and writes its data influxdb time series database. Additional python scripts run as cron jobs. These cronjobs fetch cost and weather data from the tibber and weathermap API.This data is also written to influxdb. Grafana is used for visualizing.
 
-## OKD Architecture and Setup
+All components run on a single machine. Docker is used for infouxdb and grafana. The python scripts are dependent on hardcoded uniqe values, such as access tokens and location data.
+
+## Refactoring with OKD
 
 All resources are configured in a specific project (namespace)
 
