@@ -1,11 +1,11 @@
 # Tibber Realtime Monitoring (running on OKD)
 
-This project give you the knowledge on how to create a simple application that visualize your power consumption (and costs if you have tibber). All work here is open source a free to use and distribute. Your only requirement is an modern electricy meter with tibber pulse plugged in to it.
+This project give insights on how to create a simple application that visualize your power consumption (and costs if you have tibber). All work here is open source and free to use and distribute. The only requirement is a modern electricy meter with tibber pulse plugged in to it.
 
 **Discalimer:** This project intention is to showcase OKD features. It's not to be seen as a best practice for developing or deploying cloud native applications. 
 
 ## Architecture (orginal single node/docker deployment)
-The original application (which can be found in the main branch) is a python script that communicates with the tibber api and writes its data to an influxdb time series database. In addition to the main application, thee are two python scripts that runs as cron jobs. These cronjobs fetch cost and weather data from the tibber and weathermap API. InfluxDB is configured as a datasource to grafan and the collected data is visual in a grafa dashbaord.
+The original application (which can be found in the main branch) is a python script that communicates with the tibber api and writes its data to an influxdb time series database. In addition to the tibber-realtime-monitor application, thee are two python scripts that run as cron jobs. These cronjobs fetch cost and weather data from the tibber and weathermap API. InfluxDB is used as a datasource to grafana and the collected data is visualized in a grafana dashboard.
 
 All components run on a single machine. Docker is used for influxdb and grafana. The python scripts are dependent on hardcoded unique values, such as access tokens and location data.
 
