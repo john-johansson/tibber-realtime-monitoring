@@ -42,7 +42,7 @@ oc patch deploy influxdb -n openinfra --type merge --patch-file manifests/influx
 ### tibber application
 Create the configmap and secret.
 
-You will need an acces token for tibber and openweathremap:
+You will need an acces token for tibber and openweathermap:
 
 - You can get your token from tibber [here](https://developer.tibber.com/)
 - you can get a token for openweathermap [here](https://openweathermap.org/)
@@ -50,7 +50,7 @@ You will need an acces token for tibber and openweathremap:
 You can get the acccess token from influxdb from the influxdb pod:<br>
 `oc exec $(oc get pods -o name | grep influxdb) -- influx auth list --user tibber --hide-headers  | cut -f 3)`
 
-Replace the changeme value in the tibber-secret manifest to contain your access tokens.
+Replace the changeme value in the tibber-secret manifest so it contain your access tokens.
 
 Create the resources
 ```
@@ -71,28 +71,27 @@ oc new-build python:3.9-ubi8~https://github.com/garnser/tibber-realtime-monitori
 oc new-build python:3.9-ubi8~https://github.com/garnser/tibber-realtime-monitoring.git#openshift --name weather --context-dir python-apps/weather
 ```
 
-You can track the process and output from the build by looking in the buildconfig log. For example the weather application build can be tracked with the command òc logs -f bc/weather -n openinfra`
+You can track the process and output from the build by tailing in the buildconfig log. For example the weather application build can be tracked with the command òc logs -f bc/weather -n openinfra`
 
-When the build is complete. It pushes the container image to the openshift registry. You should se your container images by executing `oc get is -n openinfra`
+When the build is complete. It pushes the container image to the onternal openshift registry. You can see your container images by executing `oc get is -n openinfra`
 
-Update the image value in the cronjob manifest with the values from the output oc `oc get is -n openinfra`
+Update the `image:` value in the cronjob manifest with the values from the output of `oc get is -n openinfra`
 
 ```yaml
 ...
-            image: changeme
+  image: changeme
 ...
 ```
 to
 ```yaml
-            image: image-registry.openshift-image-registry.svc:5000/openinfra/weather
+  image: image-registry.openshift-image-registry.svc:5000/openinfra/weather
 ```
 and 
 ```yaml
-            image: image-registry.openshift-image-registry.svc:5000/openinfra/currentprice
+  image: image-registry.openshift-image-registry.svc:5000/openinfra/currentprice
 ```
 
 Create the cronjob by applying the manifests
-
 ```
 oc apply -f manifests/currentprice-cronjob.yaml -n openinfra
 oc apply -f manifests/weather-cronjob.yaml -n openinfra
