@@ -37,7 +37,7 @@ oc new-app influxdb:latest -e DOCKER_INFLUXDB_INIT_MODE=setup -e DOCKER_INFLUXDB
 Optional, if you create the storage class earlier, create pvc:s for persisting the influxdb's data
 ```
 oc create -f manifests/influxdb-pvc.yaml -n openinfra
-oc patch deploy influxdb -n openinfra --patch-file manifests/influxdb-patch.js
+oc patch deploy influxdb -n openinfra --type merge --patch-file manifests/influxdb-patch.js
 ```
 ### tibber application
 Create the configmap and secret.
