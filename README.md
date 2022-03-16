@@ -11,7 +11,7 @@ All components run on a single machine. Docker is used for influxdb and grafana.
 
 ## Task: Refactor to run in kubernetes with help of OKD
 
-All resources are configured in a specific project (namespace)
+All resources are configured to run in a specific project (namespace)
 
 Create the project (namespace) in OKD:
 
@@ -34,7 +34,7 @@ When you use the oc new-app command to create an application, it will also creat
 oc new-app influxdb:latest -e DOCKER_INFLUXDB_INIT_MODE=setup -e DOCKER_INFLUXDB_INIT_USERNAME=tibber  -e DOCKER_INFLUXDB_INIT_PASSWORD=tibber123 -e DOCKER_INFLUXDB_INIT_ORG=tibber -e DOCKER_INFLUXDB_INIT_BUCKET=tibber -n openinfra
 ```
 
-Optional, if you create the storage class earlier, create pvc:s for persisting the influxdb's data
+Optionally, create pvc:s for persisting the influxdb's data:
 ```
 oc create -f manifests/influxdb-pvc.yaml -n openinfra
 oc patch deploy influxdb -n openinfra --type merge --patch-file manifests/influxdb-patch.js
