@@ -98,9 +98,9 @@ oc apply -f manifests/weather-cronjob.yaml -n openinfra
 ```
 
 ### grafana
-grafana is installed using the grafana operator. You need to install the operator from the operatorhub. In the administrator console, navigate to Operators -> OperatorHub and search for "grafana". Install the operator to the opeinfra namespace.
+grafana is installed using the grafana operator. You need to install the operator from the operatorhub. In the administrator console, navigate to Operators -> OperatorHub and search for "grafana". Install the operator in the openinfra namespace.
 
-When the operator has finished installing. Create the grafana resources, Grafana, GrafanaDataSource and grafana Dashboard by applying the manifests.
+When the operator has finished installing. Create the grafana resources; Grafana, GrafanaDataSource and Grafana Dashboard, by applying the manifests.
 
 First, verify successfull installation of the operator:
 
@@ -119,4 +119,4 @@ Get the external route for your application
 
 `oc get route grafana-route -o jsonpath='{.status.ingress[].host}'`
 
-Use a web broser to access it and view your consumption and cost data.
+Use a web broser to access it to view your consumption and cost data.
