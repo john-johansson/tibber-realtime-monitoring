@@ -39,7 +39,7 @@ Optionally, create pvc:s for persisting the influxdb's data:
 oc create -f manifests/influxdb-pvc.yaml -n openinfra
 oc patch deploy influxdb -n openinfra --type merge --patch-file manifests/influxdb-patch.js
 ```
-### tibber application
+### tibber realtime monitoring application
 Create the configmap and secret.
 
 You will need an acces token for tibber and openweathermap:
@@ -107,7 +107,7 @@ First, verify successfull installation of the operator:
 `oc get csv -n openinfra | grep grafana`
 
 It should return an output similar to:<br>
-`grafana-operator.v4.2.0            Grafana Operator   4.2.0     grafana-operator.v4.1.1            Succeeded`
+`grafana-operator.v4.2.0      Grafana Operator   4.2.0   grafana-operator.v4.1.1      Succeeded`
 
 Once succeded, create the resources
 ```
