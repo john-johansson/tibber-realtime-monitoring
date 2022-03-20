@@ -44,7 +44,7 @@ Create the configmap and secret.
 
 You will need an acces token for tibber and openweathermap:
 
-- You can get your token from tibber [here](https://developer.tibber.com/)
+- You can get your tibber access token [here](https://developer.tibber.com/settings/accesstoken)
 - you can get a token for openweathermap [here](https://openweathermap.org/)
 
 You can get the acccess token from influxdb from the influxdb pod:<br>
@@ -120,3 +120,8 @@ Get the external route for your application
 `oc get route grafana-route -o jsonpath='{.status.ingress[].host}'`
 
 Use a web broser to access it to view your consumption and cost data.
+
+## Get tibber?
+If you want to get tibber yourself, please use my [invite link](https://tibber.com/se/invite/6649f6fc) and we both get som credits in their store, to buy cool stuff,. For example the tibber pulse that was used in this project. Thanks!
+
+https://tibber.com/se/invite/6649f6fc
