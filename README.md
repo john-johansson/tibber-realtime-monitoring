@@ -31,14 +31,26 @@ Influxdb is deployed from the official container image available at dockerhub.io
 When you use the oc new-app command to create an application, it will also create all nessecary kubernetes resource to make in an application! 
 
 ```
-oc new-app influxdb:latest -e DOCKER_INFLUXDB_INIT_MODE=setup -e DOCKER_INFLUXDB_INIT_USERNAME=tibber  -e DOCKER_INFLUXDB_INIT_PASSWORD=tibber123 -e DOCKER_INFLUXDB_INIT_ORG=tibber -e DOCKER_INFLUXDB_INIT_BUCKET=tibber -n openinfra
+oc new-app influxdb:latest -e DOCKER_INFLUXDB_INIT_MODE=setup -e DOCKER_INFLUXDB_INIT_USERNAME=tibber -e DOCKER_INFLUXDB_INIT_PASSWORD=$(pwgen -c 16 -n 1) -e DOCKER_INFLUXDB_INIT_ORG=tibber -e DOCKER_INFLUXDB_INIT_BUCKET=tibber
 ```
 
 Optionally, create pvc:s for persisting the influxdb's data:
 ```
 oc create -f manifests/influxdb-pvc.yaml -n openinfra
-oc patch deploy influxdb -n openinfra --type merge --patch-file manifests/influxdb-patch.js
+oc patch deploy influxdb --type merge --patch-file manifests/influxdb-patch.js
 ```
+
+**Note:** Once influxdb is running. You can extract its credentials with the following commands:
+
+ - influxdb password:
+```
+oc exec $(oc get pods -o=jsonpath='{.items[0].metadata.name}' | grep influxdb) -- env |  grep DOCKER_INFLUXDB_INIT_PASSWORD| cut -f2 -d =
+```
+ - inlfuxdb api token:
+```
+oc exec $(oc get pods -o=jsonpath='{.items[0].metadata.name}' | grep influxdb) -- influx auth list --user tibber --hide-headers  | cut -f 3
+```
+
 ### tibber realtime monitoring application
 Create the configmap and secret.
 
@@ -93,8 +105,8 @@ and
 
 Create the cronjob by applying the manifests
 ```
-oc apply -f manifests/currentprice-cronjob.yaml -n openinfra
-oc apply -f manifests/weather-cronjob.yaml -n openinfra
+oc apply -f manifests/currentprice-cronjob.yaml
+oc apply -f manifests/weather-cronjob.yaml
 ```
 
 ### grafana
@@ -104,16 +116,16 @@ When the operator has finished installing. Create the grafana resources; Grafana
 
 First, verify successfull installation of the operator:
 
-`oc get csv -n openinfra | grep grafana`
+`oc get csv | grep grafana`
 
 It should return an output similar to:<br>
 `grafana-operator.v4.2.0      Grafana Operator   4.2.0   grafana-operator.v4.1.1      Succeeded`
 
 Once succeded, create the resources
 ```
-oc create -f manifests/tibber-grafanas.yaml -n openinfra
-oc create -f manifests/tibber-grafanadatasources.yaml -n openinfra
-oc create -f manifests/tibber-grafanadashboard.yaml -n openinfra
+oc create -f manifests/tibber-grafanas.yaml
+oc create -f manifests/tibber-grafanadatasources.yaml
+oc create -f manifests/tibber-grafanadashboard.yaml
 ```
 Get the external route for your application
 
