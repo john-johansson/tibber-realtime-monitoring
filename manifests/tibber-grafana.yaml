@@ -3,6 +3,7 @@ kind: Grafana
 metadata:
   name: tibber-grafana
 spec:
+  baseImage: grafana/grafana-oss:latest
   deployment:
     envFrom:
       - secretRef:
