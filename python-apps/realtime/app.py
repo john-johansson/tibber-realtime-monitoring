@@ -48,7 +48,7 @@ def _callback(pkg):
 
 async def run():
     async with aiohttp.ClientSession() as session:
-        tibber_connection = tibber.Tibber(os.environ['TIBBER_TOKEN'], websession=session)
+        tibber_connection = tibber.Tibber(os.environ['TIBBER_TOKEN'], websession=session, user_agent="baltimore")
         await tibber_connection.update_info()
     home = tibber_connection.get_homes()[0]
     await home.rt_subscribe(_callback)
